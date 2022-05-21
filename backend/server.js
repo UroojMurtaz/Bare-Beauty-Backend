@@ -1,7 +1,18 @@
 const express = require('express')
 const dotenv = require('dotenv').config()
+const colors =require("colors")
+// const connectDB=require("./config/db")
 const {errorHandler} = require('./middleware/errorMiddleware')
 const port = process.env.PORT || 5000
+const mongoose = require ("mongoose")
+var dbURL=require("./properties").DB_URL;
+
+mongoose.connect(dbURL);
+mongoose.connection.on("connected",()=>{
+    console.log("connected to database")
+})
+
+
 
 const app = express()
 

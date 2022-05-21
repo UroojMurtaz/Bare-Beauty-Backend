@@ -1,11 +1,16 @@
 const asyncHandler= require("express-async-handler")
+const Product = require("../models/Product")
+
+
 
 // @desc Get Product
 // @route GET /api/product
 // @access Private
 
 const getProduct=asyncHandler(async(req,res)=>{
-        res.status(200).json({message: "Get"})
+         const product=await Product.find()
+
+        res.status(200).json(product)
    
 })
 // @desc Post Product
@@ -13,11 +18,10 @@ const getProduct=asyncHandler(async(req,res)=>{
 // @access Private
 
 const postProduct= asyncHandler(async(req,res)=>{
-    if (!req.body.text){
-        res.status(400)
-        throw new Error("please add text")
-    }
-    res.status(200).json({message: "hello"})
+    const product = await Product.create({
+        Title: req.body.Title
+    })
+    res.status(200).json(product)
 
 })
 
@@ -26,7 +30,18 @@ const postProduct= asyncHandler(async(req,res)=>{
 // @access Private
 
 const updateProduct=asyncHandler(async(req,res)=>{
-    res.status(200).json({message: `Update Product ${req.params.id}`})
+
+    const productid=await Product.findById(req.params.id)
+
+    if(!productid){
+        res.status(400)
+        throw new Error("Product not found")
+    }
+    
+    const updatedProduct= await Product.findByIdAndUpdate(req.params.id,req.body,{
+        new:true
+    })
+    res.status(200).json(updatedProduct)
 
 })
 
@@ -35,7 +50,16 @@ const updateProduct=asyncHandler(async(req,res)=>{
 // @access Private
 
 const deleteProduct=asyncHandler(async(req,res)=>{
-    res.status(200).json({message: `Delete ${req.params.id}`})
+    const productid=await Product.findById(req.params.id)
+
+    if(!productid){
+        res.status(400)
+        throw new Error("Product not found")
+    }
+    
+    await productid.remove()
+    
+    res.status(200).json({id: req.params.id})
 
 })
 
