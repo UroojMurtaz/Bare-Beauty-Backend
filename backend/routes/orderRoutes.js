@@ -12,7 +12,7 @@ const {getOrder,
 
 const {protect} = require('../middleware/authMiddleware')
 
-router.route('/').get(protect ,getOrder).post(protect,postOrder)
+router.route('/').get(protect ,getOrder).post(postOrder)
 router.route('/:id').put(protect,updateOrder).delete(protect,deleteOrder)
 
 

@@ -1,10 +1,15 @@
 const mongoose=require("mongoose")
 
 const productSchema=mongoose.Schema({
-    Title: {
+        Title: {
         type: String,
         require: true,
         },
+
+        price: {
+            type: String,
+            require: true,
+            },
 
         user:{
             type:mongoose.Schema.Types.ObjectId,
@@ -12,14 +17,9 @@ const productSchema=mongoose.Schema({
             ref: 'User'
         },
          
-        ProductId: {
-        type: Number,
-        require: true
-        },
-         
-        Img:{
-        data : Buffer,
-        contentType: String,
+        productImage:{
+            type: String,
+            require: true,
         },
          
         Quantity: {
@@ -42,10 +42,10 @@ const productSchema=mongoose.Schema({
             require: true
             },
         
-        SkinColor: [{
+        SkinColor: {
         type: String,
         require: true
-        }],
+        },
         
 })
 

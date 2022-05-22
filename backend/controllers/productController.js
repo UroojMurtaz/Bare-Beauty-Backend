@@ -2,8 +2,6 @@ const asyncHandler= require("express-async-handler")
 const Product = require("../models/Product")
 const User = require("../models/User")
 
-
-
 // @desc Get Product
 // @route GET /api/product
 // @access Private
@@ -18,19 +16,7 @@ const getProduct=asyncHandler(async(req,res)=>{
 // @route POST /api/product
 // @access Private
 
-const postProduct= asyncHandler(async(req,res)=>{
-    const product = await Product.create({
-        Title: req.body.Title,
-        ProductId: req.body.ProductId,
-        Quantity:req.body.Quantity,
-        Description:req.body.Description,
-        Category:req.body.Category,
-        SkinColor:req.body.SkinColor,
-        user: req.user.id
-    })
-    res.status(200).json(product)
 
-})
 
 // @desc Put Product
 // @route PUT /api/product/:id
@@ -95,5 +81,5 @@ const deleteProduct=asyncHandler(async(req,res)=>{
 })
 
 module.exports = {
-    getProduct,deleteProduct,updateProduct,postProduct
+    getProduct,deleteProduct,updateProduct
 }

@@ -10,7 +10,7 @@ const User = require("../models/User")
 const registerUser = asyncHandler( async(req, res) => {
     const {userName,userId,userEmail,userPassword,userPhoneNumber,Role}=req.body
 
-    if(!userName || !userId || !userEmail || !userPassword || !userEmail){
+    if(!userName || !userId || !userEmail || !userPassword || !Role || !userPhoneNumber){
         res.status(400)
         throw new Error("Please add all fields")
     }
