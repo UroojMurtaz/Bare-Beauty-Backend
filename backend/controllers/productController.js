@@ -1,5 +1,6 @@
 const asyncHandler= require("express-async-handler")
 const Product = require("../models/Product")
+const User = require("../models/User")
 
 
 
@@ -8,7 +9,7 @@ const Product = require("../models/Product")
 // @access Private
 
 const getProduct=asyncHandler(async(req,res)=>{
-         const product=await Product.find()
+         const product=await Product.find({user:req.user.id})
 
         res.status(200).json(product)
    
@@ -19,7 +20,13 @@ const getProduct=asyncHandler(async(req,res)=>{
 
 const postProduct= asyncHandler(async(req,res)=>{
     const product = await Product.create({
-        Title: req.body.Title
+        Title: req.body.Title,
+        ProductId: req.body.ProductId,
+        Quantity:req.body.Quantity,
+        Description:req.body.Description,
+        Category:req.body.Category,
+        SkinColor:req.body.SkinColor,
+        user: req.user.id
     })
     res.status(200).json(product)
 
@@ -38,6 +45,18 @@ const updateProduct=asyncHandler(async(req,res)=>{
         throw new Error("Product not found")
     }
     
+    //check for user
+    const user=await User.findById(req.user.id)
+    if(user){
+        res.status(401)
+        throw new Error("user not found")
+    }
+    //make sure the looged in user match the Produt user
+    if(productid.user.toString() !== user.id){
+        res.status(401)
+        throw new Error("user not Authorized")
+    }
+
     const updatedProduct= await Product.findByIdAndUpdate(req.params.id,req.body,{
         new:true
     })
@@ -57,6 +76,18 @@ const deleteProduct=asyncHandler(async(req,res)=>{
         throw new Error("Product not found")
     }
     
+     //check for user
+     const user=await User.findById(req.user.id)
+     if(!user){
+         res.status(401)
+         throw new Error("user not found")
+     }
+     //make sure the looged in user match the Produt user
+     if(productid.user.toString() !== user.id){
+         res.status(401)
+         throw new Error("user not Authorized")
+     }
+ 
     await productid.remove()
     
     res.status(200).json({id: req.params.id})
